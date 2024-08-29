@@ -1,0 +1,39 @@
+FROM	debian:11.10
+
+ENV MARIADB_VERSION 10.5.12
+
+RUN apt-get update && \
+	apt-get install -y \
+	build-essential \
+	cmake \
+	libncurses5-dev \
+	bison \
+	wget \
+	libssl-dev \
+	libaio-dev \
+	libboost-program-options-dev \
+	libpcre3-dev \
+	curl \
+	ca-certificates \
+	zlib1g-dev \
+	libtirpc-dev \
+	&& apt-get clean
+
+WORKDIR /usr/src/mariadb
+
+RUN wget https://downloads.mariadb.org/interstitial/mariadb-${MARIADB_VERSION}/source/mariadb-${MARIADB_VERSION}.tar.gz && \
+	tar -xzf mariadb-${MARIADB_VERSION}.tar.gz && \
+	rm mariadb-${MARIADB_VERSION}.tar.gz
+
+RUN cd mariadb-${MARIADB_VERSION} && \
+	cmake . && \
+	make && \
+	make install
+
+RUN mkdir -p /var/lib/mysql
+
+RUN /usr/local/mysql/scripts/mysql-install-db --user=mysql --datadir=/var/lib/mysql
+
+EXPOSE 3306
+
+CMD ["/usr/local/mysql/bin/mysqld", "--datadir=/var/lib/mysql", "--user=mysql"]
