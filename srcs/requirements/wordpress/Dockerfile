@@ -25,4 +25,12 @@ RUN     docker-php-ext-configure gd \
 
 RUN     wget https://wordpress.org/latest.tar.gz \
         && tar -xzvf latest.tar.gz \
-        && mv wordpress
+        && mv wordpress /var/www/html/ \
+        && chown -R www-data:www-data /var/www/html/wordpress \
+        && chmod -R 755 /var/www/html/wordpress \
+        && rm latest.tar.gz
+
+#to change
+COPY www.conf /etc/php/7.4/fpm/pool.d/www.conf
+
+EXPOSE 9000
