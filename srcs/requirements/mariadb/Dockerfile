@@ -1,10 +1,7 @@
 FROM	debian:11.10
 
 #common line
-RUN	apt-get update && apt-get install -y \
-	nano \
-	wget \
-	tar
+RUN	apt-get update && apt-get install -y nano wget tar
 
 RUN	echo "deb http://ftp.debian.org/debian bookworm main contrib" > /etc/apt/sources.list.d/mariadb.list \
 	&& echo "deb-src http://ftp.debian.org/debian bookworm main contrib" >> /etc/apt/sources.list.d/mariadb.list \
